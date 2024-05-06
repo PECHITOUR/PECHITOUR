@@ -1,0 +1,80 @@
+import pygame
+import random
+
+# Inicializar Pygame
+pygame.init()
+
+# Definir colores
+NEGRO = (0, 0, 0)
+BLANCO = (255, 255, 255)
+
+# Definir constantes para la pantalla
+ANCHO_PANTALLA = 800
+ALTO_PANTALLA = 600
+
+# Definir la clase para el jugador
+class Jugador(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface([50, 50])
+        self.image.fill(BLANCO)
+        self.rect = self.image.get_rect()
+        self.rect.x = 50
+        self.rect.y = 50
+
+    def update(self):
+        pass
+
+# Definir la clase para los enemigos
+class Enemigo(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface([50, 50])
+        self.image.fill(NEGRO)
+        self.rect = self.image.get_rect()
+        self.rect.x = random.randrange(ANCHO_PANTALLA - self.rect.width)
+        self.rect.y = random.randrange(ALTO_PANTALLA - self.rect.height)
+
+    def update(self):
+        pass
+
+# Crear una lista de todos los sprites
+todos_sprites = pygame.sprite.Group()
+
+# Crear al jugador
+jugador = Jugador()
+todos_sprites.add(jugador)
+
+# Crear los enemigos
+for i in range(10):
+    enemigo = Enemigo()
+    todos_sprites.add(enemigo)
+
+# Configurar la pantalla
+pantalla = pygame.display.set_mode([ANCHO_PANTALLA, ALTO_PANTALLA])
+pygame.display.set_caption("Mi Juego")
+
+# Controlar la velocidad de actualización de la pantalla
+reloj = pygame.time.Clock()
+
+# Bucle principal del juego
+jugando = True
+while jugando:
+    # Manejo de eventos
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            jugando = False
+
+    # Actualizar
+    todos_sprites.update()
+
+    # Dibujar
+    pantalla.fill(BLANCO)
+    todos_sprites.draw(pantalla)
+    pygame.display.flip()
+
+    # Limitar la velocidad de actualización
+    reloj.tick(30)
+
+# Salir de Pygame
+pygame.quit()
